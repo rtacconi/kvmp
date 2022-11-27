@@ -1,5 +1,17 @@
 # Virtman
 
+## Development
+Start by entering the venv with:
+poetry shell
+
+Run the flask app in dev mode:
+poetry run flask --debug --app kvmp.control_panel run
+
+Run pytest:
+pytest
+
+https://testdriven.io/blog/flask-htmx-tailwind/
+
 ## Marketing
 
 Hosting control panel virtualization

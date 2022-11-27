@@ -1,14 +1,16 @@
-from flask import Flask
-from flask import render_template
+from flask import Flask, render_template, request
+from flask_assets import Bundle, Environment
+from kvmp.todo import todos
 import libvirt
 
-app = Flask(__name__)
+# https://testdriven.io/blog/flask-htmx-tailwind/
 
-def show_all_attrs(value):
-    res = []
-    for k in dir(value):
-        res.append('%r %r\n' % (k, getattr(value, k)))
-    return '\n'.join(res)
+app = Flask(__name__)
+assets = Environment(app)
+css = Bundle("src/main.css", output="dist/main.css")
+
+assets.register("css", css)
+css.build()
 
 @app.route("/")
 def hello_world():
@@ -18,3 +20,22 @@ def hello_world():
       exit(1)
 
     return render_template('index.html', instances=conn.listDefinedDomains())
+
+@app.route("/system")
+def system():
+    conn = libvirt.open('qemu:///system')
+    return conn.getSysinfo()
+
+@app.route("/search", methods=["POST"])
+def search_todo():
+    search_term = request.form.get("search")
+
+    if not len(search_term):
+        return render_template("todo.html", todos=[])
+
+    res_todos = []
+    for todo in todos:
+        if search_term in todo["title"]:
+            res_todos.append(todo)
+
+    return render_template("todo.html", todos=res_todos)
