@@ -1,0 +1,7 @@
+<!doctype html>
+<title>Hello from Flask</title>
+<ul>
+{% for i in instances %}
+  <li><{{ i | show_all_attrs }}</li>
+{% endfor %}
+</ul>
