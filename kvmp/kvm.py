@@ -67,9 +67,9 @@ def create_instance(conn, xmlconfig) -> tuple:
       return('OK', 'Failed to define the instance')
 
     if instance.isActive() == 1:
-        return ('OK', "Running")
+        return ('OK', "Running", instance)
     else:
-        return ('error', "Not Running")
+        return ('error', "Not Running", None)
 
     # instances = conn.listDefinedDomains()
     # print('Defined instances: {}'.format(instances))
@@ -89,19 +89,19 @@ def create_instance(conn, xmlconfig) -> tuple:
 #
 #
 #
-#
-# result_destroy = instance.destroy()
-# result_undefine = instance.undefine()
-#
-# if result_destroy == 0 and result_undefine == 0:
-#     print("Destroyed")
-# else:
-#     print("Not Destroyed")
-#
+def destroy(instance):
+    result_destroy = instance.destroy()
+    result_undefine = instance.undefine()
+
+    if result_destroy == 0 and result_undefine == 0:
+        return ('OK', "Destroyed")
+    else:
+        return ("error", "Not Destroyed")
+
 # conn.close()
 #
 #
-def get instance_table(conn) -> tuple:
+def get_instance_table(conn) -> tuple:
     instance_table = []
     conn = connect()
     for i in conn.listAllDomains():
@@ -116,3 +116,4 @@ def get instance_table(conn) -> tuple:
                 }
             )
     return ('OK', instance_table)
+

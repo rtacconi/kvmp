@@ -33,9 +33,6 @@ def search_todo():
     if not len(search_term):
         return render_template("todo.html", todos=[])
 
-    res_todos = []
-    for todo in todos:
-        if search_term in todo["title"]:
-            res_todos.append(todo)
+    res_todos = [todo for todo in todos if search_term in todo["title"]]
 
     return render_template("todo.html", todos=res_todos)

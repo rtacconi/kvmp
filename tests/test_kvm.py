@@ -1,6 +1,6 @@
 import pytest
 import libvirt
-from kvmp.kvm import generate_mac_address, render_xml_config, get_uuid, connect, create_instance
+from kvmp.kvm import generate_mac_address, render_xml_config, get_uuid, connect, create_instance, destroy
 
 def test_create_ubuntu_xml():
     assert render_xml_config(
@@ -26,10 +26,12 @@ def test_render_instance():
         {
             'name': 'ubuntu2204-34',
             'uuid': get_uuid(),
-            'mem_kib': 4 * 1048576,
-            'current_mem_kib': 4 * 1048576,
-            'source_file': "/var/lib/libvirt/images/ubuntu22.04-2.qcow2",
+            'mem_kib': 1 * 1048576,
+            'current_mem_kib': 1 * 1048576,
+            'source_file': "/var/lib/libvirt/images/ubuntu22.04.qcow2",
             'mac_address': generate_mac_address()
         }
     )
-    assert create_instance(connect(), xmlconfig) == ('OK', 'Running')
+    ituple = create_instance(connect(), xmlconfig)
+    assert ituple == ('OK', 'Running', ituple[2])
+    # assert destroy(ituple[2]) == ('OK', "Destroyed") 
