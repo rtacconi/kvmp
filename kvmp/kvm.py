@@ -1,6 +1,5 @@
 import os
 import libvirt
-import typing
 from jinja2 import Template
 import random
 import uuid
@@ -105,15 +104,19 @@ def get_instance_table(conn) -> tuple:
     instance_table = []
     conn = connect()
     for i in conn.listAllDomains():
-        if i.isActive():
-            instance_table.append(
-                {
-                    "name": i.name(),
-                    "id": i.ID(),
-                    "os_type": i.OSType(),
-                    "cpus": i.maxVcpus(),
-                    "ram": i.maxMemory() / 1024 / 1024 # GiB of RAM
-                }
-            )
-    return ('OK', instance_table)
+        mydict = {            
+                "name": i.name(),
+                "id": i.ID(),
+                "os_type": i.OSType(),
+                "ram": i.maxMemory() / 1024 / 1024 # GiB of RAM
+            }
 
+        if i.isActive():
+            mydict["cpus"] = i.maxVcpus()
+            mydict["power"] = "on"
+        else:
+            mydict["cpus"] = 0
+            mydict["power"] = "off"
+        instance_table.append(mydict)
+
+    return ('OK', instance_table)

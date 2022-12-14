@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 from flask_assets import Bundle, Environment
-from kvmp.todo import todos
+from kvmp.instance import instances
 import libvirt
 
 # https://testdriven.io/blog/flask-htmx-tailwind/
@@ -16,10 +16,10 @@ css.build()
 def hello_world():
     conn = libvirt.open('qemu:///system')
     if conn == None:
-      print('Failed to connecto to the hypervizor')
+      print('Failed to connect to the hypervizor')
       exit(1)
 
-    return render_template('index.html', instances=conn.listDefinedDomains())
+    return render_template('index.html', instances=instances)
 
 @app.route("/system")
 def system():
@@ -27,12 +27,16 @@ def system():
     return conn.getSysinfo()
 
 @app.route("/search", methods=["POST"])
-def search_todo():
+def search_instance():
     search_term = request.form.get("search")
 
     if not len(search_term):
-        return render_template("todo.html", todos=[])
+        return render_template("instance.html", instances=instances)
 
-    res_todos = [todo for todo in todos if search_term in todo["title"]]
+    res_instances = [instance for instance in instances if search_term in instance["name"]]
 
-    return render_template("todo.html", todos=res_todos)
+    return render_template("instance.html", instances=res_instances)
+
+@app.route("/render_instances")
+def render_instances():
+    return render_template("instance.html", instances=instances)

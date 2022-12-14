@@ -10,7 +10,7 @@ def test_create_ubuntu_xml():
             'uuid': get_uuid(),
             'mem_kib': 4 * 1048576,
             'current_mem_kib': 4 * 1048576,
-            'source_file': "/var/lib/libvirt/images/ubuntu22.04-2.qcow2",
+            'source_file': "/var/lib/libvirt/images/ubuntu22.04.qcow2",
             'mac_address': generate_mac_address()
         }
     ).startswith("<domain type=\"kvm\">\n  <name>ubuntu2204-3</name>")
