@@ -1,4 +1,4 @@
-# Virtman
+# kvmp
 
 ## Development
 Start by entering the venv with:
