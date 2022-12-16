@@ -39,7 +39,7 @@ def render_xml_config(source, params):
 
 def connect(uri=''):
     if len(uri) == 0:
-        conn = libvirt.open('qemu:///system')
+        conn = libvirt.open()
         if conn == None:
             print('Failed to connect to the hypervizor')
             exit(1)
