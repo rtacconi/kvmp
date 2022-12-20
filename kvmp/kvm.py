@@ -7,7 +7,7 @@ KIB = 1048576
 
 def get_ips(instance: libvirt.virDomain) -> tuple:
     querytype = libvirt.VIR_DOMAIN_INTERFACE_ADDRESSES_SRC_AGENT
-    ipversion   = libvirt.VIR_IP_ADDR_TYPE_IPV4
+    ipversion = libvirt.VIR_IP_ADDR_TYPE_IPV4
     try:
         ifaces = instance.interfaceAddresses(querytype)
     except Exception as e:
@@ -88,7 +88,7 @@ def create_instance(conn, xmlconfig) -> tuple:
 #
 #
 #
-def destroy(instance):
+def destroy(instance) -> tuple:
     result_destroy = instance.destroy()
     result_undefine = instance.undefine()
 
