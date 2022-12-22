@@ -9,5 +9,6 @@
         <label for="uri" class="form-label">Uri</label>
         <input type="text" class="form-control" name="uri" value="">
     </div>
+    <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
