@@ -14,6 +14,10 @@ records = "0.5.3"
 psycopg2 = "^2.9.5"
 libvirt-python = "8.9.0"
 pytailwindcss = "^0.1.4"
+flask-seasurf = "^1.1.1"
+flask-login = "^0.6.2"
+werkzeug = "^2.2.2"
+paramiko = "^2.12.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

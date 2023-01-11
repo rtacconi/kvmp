@@ -12,6 +12,9 @@ pytest
 
 https://testdriven.io/blog/flask-htmx-tailwind/
 
+## Migrations
+To manage the database schema we use (dbmate)[https://github.com/amacneil/dbmate]
+
 ## Marketing
 
 Hosting control panel virtualization

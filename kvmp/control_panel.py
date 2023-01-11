@@ -4,6 +4,8 @@ from kvmp.instance import instances
 import libvirt
 import sys
 from flask_seasurf import SeaSurf
+from werkzeug.wrappers import Response
+import psycopg2
 
 # https://testdriven.io/blog/flask-htmx-tailwind/
 
@@ -18,24 +20,18 @@ class User:
         return f'<User: {self.username}>'
 
 users = []
-users.append(User(id=1, username='Test', password='password'))
-users.append(User(id=2, username='Riccy_DJ', password='test '))
+users.append(User(id=1, username='alus', password='password'))
+users.append(User(id=2, username='rtacconi', password='test'))
 
 
 app = Flask(__name__)
 app.secret_key = 'gfdsgsfdgfdgdsfgdfgfdgdfgsgfdgdfg55efdgfsdt5estdt'
+app.config['DATABASE'] = connect_to_db()
 assets = Environment(app)
 css = Bundle("src/main.css", output="dist/main.css")
-
 assets.register("css", css)
 css.build()
-
 csrf = SeaSurf(app)
-
-
-def protect():
-    if not g.user: return redirect(url_for('login'))
-
 
 @csrf.exempt
 @app.before_request
@@ -68,7 +64,7 @@ def login():
 @csrf.exempt
 @app.route('/profile')
 def profile():
-    protect()
+    if not g.user: return redirect(url_for('login'))
 
     conn = libvirt.open('qemu:///system')
     if conn == None:
@@ -94,7 +90,7 @@ def system():
 @csrf.exempt
 @app.route("/search", methods=["POST"])
 def search_instance():
-    protect()
+    if not g.user: return redirect(url_for('login'))
 
     search_term = request.form.get("search")
 
@@ -109,19 +105,20 @@ def search_instance():
 @csrf.exempt
 @app.route("/render_instances")
 def render_instances():
-    protect()
+    if not g.user: return redirect(url_for('login'))
     return render_template("instance.html", instances=instances)
 
 
 @app.route("/test")
 def test():
-    protect()
+    if not g.user: return redirect(url_for('login'))
+    # if not g.user: return redirect(url_for('login'))
     return render_template("form.html")
     
 
 @app.route("/print", methods=["GET", "POST"])
 def index():
-    protect()
+    if not g.user: return redirect(url_for('login'))
     name = request.form["name"]
     uri = request.form["uri"]
 
