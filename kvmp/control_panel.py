@@ -1,36 +1,17 @@
 from flask import Flask, render_template, request, g, redirect, session, url_for
-from flask_assets import Bundle, Environment
-from kvmp.instance import instances
 import libvirt
 import sys
 from flask_seasurf import SeaSurf
 from werkzeug.wrappers import Response
 import psycopg2
+import kvmp.db as db
 
-# https://testdriven.io/blog/flask-htmx-tailwind/
-
-
-class User:
-    def __init__(self, id, username, password):
-        self.id = id
-        self.username = username
-        self.password = password
-
-    def __repr__(self):
-        return f'<User: {self.username}>'
-
-users = []
-users.append(User(id=1, username='alus', password='password'))
-users.append(User(id=2, username='rtacconi', password='test'))
-
-
-app = Flask(__name__)
+app = Flask(
+    __name__,
+    static_url_path='', 
+    static_folder='./static'
+)
 app.secret_key = 'gfdsgsfdgfdgdsfgdfgfdgdfgsgfdgdfg55efdgfsdt5estdt'
-app.config['DATABASE'] = connect_to_db()
-assets = Environment(app)
-css = Bundle("src/main.css", output="dist/main.css")
-assets.register("css", css)
-css.build()
 csrf = SeaSurf(app)
 
 @csrf.exempt
@@ -39,26 +20,27 @@ def before_request():
     g.user = None
 
     if 'user_id' in session:
-        user = [x for x in users if x.id == session['user_id']][0]
-        g.user = user
+        users = db.get_user(session['user_id'])
+        if len(users) > 0:
+            g.user = users[0]
         
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
-        session.pop('user_id', None)
+        # session.pop('user_id', None)
 
         username = request.form['username']
         password = request.form['password']
-        
-        user = [x for x in users if x.username == username][0]
-        if user and user.password == password:
-            session['user_id'] = user.id
-            return redirect(url_for('profile'))
+        users = db.user_login(username, password)
 
-        return redirect(url_for('login'))
-
-    return render_template('login.html')
+        if len(users) > 0:
+            session['user_id'] = users[0]['id']
+            return redirect(url_for('index'))
+        else:
+            return redirect(url_for('login'))
+    else:
+        return render_template('login.html')
 
 
 @csrf.exempt
@@ -66,18 +48,12 @@ def login():
 def profile():
     if not g.user: return redirect(url_for('login'))
 
-    conn = libvirt.open('qemu:///system')
-    if conn == None:
-      print('Failed to connect to the hypervizor')
-      exit(1)
-
-    return render_template('index.html', instances=instances)
-
+    return render_template('profile.html')
 
 @csrf.exempt
 @app.route("/")
-def hello_world():
-    return redirect(url_for('login'))
+def index():
+    return render_template('index.html')
 
 
 @csrf.exempt
@@ -95,33 +71,37 @@ def search_instance():
     search_term = request.form.get("search")
 
     if not len(search_term):
-        return render_template("instance.html", instances=instances)
+        return render_template("instance.html", instances=[])
 
     res_instances = [instance for instance in instances if search_term in instance["name"]]
 
     return render_template("instance.html", instances=res_instances)
 
-
 @csrf.exempt
 @app.route("/render_instances")
 def render_instances():
     if not g.user: return redirect(url_for('login'))
-    return render_template("instance.html", instances=instances)
-
-
-@app.route("/test")
-def test():
-    if not g.user: return redirect(url_for('login'))
-    # if not g.user: return redirect(url_for('login'))
-    return render_template("form.html")
+    return render_template("instance.html", instances=[])
     
+# @app.route("/print", methods=["GET", "POST"])
+# def print():
+#     if not g.user: return redirect(url_for('login'))
+#     name = request.form["name"]
+#     uri = request.form["uri"]
 
-@app.route("/print", methods=["GET", "POST"])
-def index():
-    if not g.user: return redirect(url_for('login'))
-    name = request.form["name"]
-    uri = request.form["uri"]
+#     print("{}".format(name), file=sys.stderr)
+#     print("{}".format(uri), file=sys.stdout)
+#     return render_template("form.html")
 
-    print("{}".format(name), file=sys.stderr)
-    print("{}".format(uri), file=sys.stdout)
-    return render_template("form.html")
+@app.route('/icons', methods=["GET"])
+def icons():
+    return render_template("icons.html")
+
+@app.route('/security', methods=["GET"])
+def security():
+    return render_template("security.html")
+
+@app.errorhandler(404)
+def page_not_found(e):
+    # note that we set the 404 status explicitly
+    return render_template('404.html'), 404

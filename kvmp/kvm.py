@@ -44,7 +44,6 @@ def create_instance(xmlconfig, username, host) -> tuple:
         "virsh", "-c", f"qemu+ssh://{username}@{host}/system", 
         "create", "/Users/riccardotacconi/ubuntu22.04.xml"
     ])
-    print(result)
     return result
 
 def destroy_instance(name, username, host) -> tuple:

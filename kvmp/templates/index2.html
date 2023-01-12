@@ -1,0 +1,33 @@
+<!-- templates/index.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="w-small w-2/3 mx-auto py-10 text-gray-600">
+  <input
+    type="text"
+    name="search"
+    hx-post="/search"
+    hx-trigger="keyup changed delay:250ms"
+    hx-indicator=".htmx-indicator"
+    hx-target="#instance-results"
+    placeholder="Search"
+    class="bg-white h-10 px-5 pr-10 rounded-full text-2xl focus:outline-none"
+  >
+  <span class="htmx-indicator">Searching...</span>
+</div>
+
+<table class="border-collapse w-small w-2/3 mx-auto">
+  <thead>
+    <tr>
+      <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">name</th>
+      <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">id</th>
+      <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">os type</th>
+      <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">ram</th>
+      <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">cpus</th>
+      <th class="p-3 font-bold uppercase bg-gray-200 text-gray-600 border border-gray-300 hidden lg:table-cell">power</th>
+    </tr>
+  </thead>
+  <tbody id="instance-results" > </tbody>
+</table>
+{% endblock content %}
