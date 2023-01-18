@@ -53,6 +53,7 @@ def profile():
 @csrf.exempt
 @app.route("/")
 def index():
+    if not g.user: return redirect(url_for('login'))
     return render_template('index.html')
 
 
