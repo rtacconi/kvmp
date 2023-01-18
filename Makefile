@@ -1,14 +1,30 @@
-docker-build:
+build:
 	docker build -t postgres-data-volume .
 
 docker-run:
 	docker run -p 5432:5432 -v $(shell pwd)/data:/var/lib/postgresql/data \
 		-e POSTGRES_USER=kvmp -e POSTGRES_PASSWORD=password -d postgres-data-volume
+	docker run -p 6379:6379 -d redis redis-server --save 60 1 --loglevel warning
+
+stop:
+	docker stop $(shell docker ps -qa)
+
+list:
+	@docker ps
+ 
+clean:
+	docker rm $(shell docker ps -qa)
+	docker rmi -f $(shell docker images -q)
 
 dbmate:
 	docker run --rm -v $(shell pwd)/db:/db ghcr.io/amacneil/dbmate:1 ${cmd}
 
-run:
+c:
+	poetry run celery --app kvmp.celery worker --loglevel=info
+
+run: stop docker-run
+	sleep 1
+	dbmate -e DBMATE_DATABASE_URL up
 	export FLASK_RUN_HOST=0.0.0.0 && \
 	export FLASK_RUN_PORT=3000 && \
 	poetry run flask --debug --app kvmp.control_panel run
@@ -17,10 +33,10 @@ dbmate-new:
 	dbmate new ${file}
 
 dbmate-up:
-	dbmate -e DATABASE_URL up
+	dbmate -e DBMATE_DATABASE_URL up
 
 dbmate-down:
-	dbmate -e DATABASE_URL down
+	dbmate -e DBMATE_DATABASE_URL down
 
 dbmate-test-up:
 	dbmate -e DBMATE_TEST_DATABASE_URL up
@@ -33,3 +49,6 @@ test-s:
 
 test:
 	poetry run pytest
+
+celery:
+	celery -A kvmp.celery worker --loglevel=info

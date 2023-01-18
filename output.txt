@@ -1,0 +1,18 @@
+total 216
+-rw-r--r--   1 riccardotacconi  staff    119 11 Jan 21:41 Dockerfile
+-rw-r--r--   1 riccardotacconi  staff   1126 18 Jan 20:47 Makefile
+-rw-r--r--   1 riccardotacconi  staff   2227 11 Jan 22:17 README.md
+drwxr-xr-x   4 riccardotacconi  staff    128 27 Dec 19:18 __pycache__
+-rw-r--r--   1 riccardotacconi  staff     72 11 Jan 22:07 cat
+drwx------@ 26 riccardotacconi  staff    832 18 Jan 20:48 data
+drwxr-xr-x   3 riccardotacconi  staff     96 11 Jan 22:15 db
+-rw-r--r--   1 riccardotacconi  staff    263 27 Dec 19:18 kvm.sh
+drwxr-xr-x  13 riccardotacconi  staff    416 18 Jan 18:12 kvmp
+-rw-r--r--   1 riccardotacconi  staff      0 18 Jan 20:52 output.txt
+-rw-r--r--   1 riccardotacconi  staff  81847 18 Jan 18:27 poetry.lock
+-rw-r--r--   1 riccardotacconi  staff    814 18 Jan 18:27 pyproject.toml
+drwxr-xr-x   3 riccardotacconi  staff     96 27 Dec 19:18 src
+drwxr-xr-x  14 riccardotacconi  staff    448 12 Jan 10:36 static
+-rw-r--r--   1 riccardotacconi  staff    743 27 Dec 19:18 tailwind.config.js
+drwxr-xr-x   5 riccardotacconi  staff    160 12 Jan 14:50 tests
+drwxr-xr-x   3 riccardotacconi  staff     96 11 Jan 19:46 xml
