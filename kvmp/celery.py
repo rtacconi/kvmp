@@ -1,12 +1,11 @@
 import time
-from kvmp.config import CONFIG
 from celery import Celery
 import os
 
 
 celery = Celery(__name__)
-celery.conf.broker_url = CONFIG["CELERY_BROKER_URL"]
-celery.conf.result_backend = CONFIG["CELERY_RESULT_BACKEND"]
+celery.conf.broker_url = os.environ["CELERY_BROKER_URL"]
+celery.conf.result_backend = os.environ["CELERY_RESULT_BACKEND"]
 
 
 @celery.task(name="create_task")

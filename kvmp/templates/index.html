@@ -44,4 +44,37 @@
         </div>
     </div>
 </div>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="white-box">
+            <h3 class="box-title">Servers</h3>
+            <div class="table-responsive">
+                <a href="/add_server">Add server</a>
+                <table class="table text-nowrap">
+                    <thead>
+                        <tr>
+                            <th class="border-top-0">#</th>
+                            <th class="border-top-0">Host</th>
+                            <th class="border-top-0">Username</th>
+                            <th class="border-top-0">Key File</th>
+                            <th class="border-top-0">Created At</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for server in servers %}
+                        <tr>
+                            <td><a href="/servers/{{ server[0] }}">{{ server[0] }}</a></td>
+                            <td>{{ server[1] }}</td>
+                            <td>{{ server[2] }}</td>
+                            <td>{{ server[3] }}</td>
+                            <td>{{ server[4] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

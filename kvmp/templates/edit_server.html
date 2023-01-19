@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="col-lg-4 col-md-12">
+    <form action="/servers/{{ server[0] }}" method="post">
+      <div class="form-group">
+        <label for="host">Host:</label>
+        <input type="text" class="form-control" id="host" name="host" 
+          value="{{ server[1]}}" required>
+      </div>
+      <div class="form-group">
+        <label for="username">Username:</label>
+        <input type="text" class="form-control" id="username" name="username" 
+          value="{{ server[2] }}" required>
+      </div>
+      <div class="form-group">
+        <label for="key_file">Key File:</label>
+        <input type="text" class="form-control" id="key_file" name="key_file" 
+          value="{{ server[3] }}" required>
+      </div>
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+      <input type="hidden" name="_method" value="put" />
+      <button type="submit" class="btn btn-primary">Save Server</button>
+    </form>
+</div>
+{% endblock %}
