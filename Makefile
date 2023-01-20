@@ -66,5 +66,7 @@ test:
 celery:
 	celery -A kvmp.celery worker --loglevel=info
 
+
+.PHONY: psql
 psql:
-	docker exec -it $(shell docker ps | grep postgres | awk '{{print $1}}') psql -U kvmp -d kvmp  
+	docker exec -it $(shell docker ps | grep postgres | awk '{print $$1}') psql -U kvmp -d kvmp
