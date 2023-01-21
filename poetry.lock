@@ -667,17 +667,6 @@ yaml = ["PyYAML (>=3.10)"]
 zookeeper = ["kazoo (>=1.3.1)"]
 
 [[package]]
-name = "libvirt-python"
-version = "8.9.0"
-description = "The libvirt virtualization API python binding"
-category = "main"
-optional = false
-python-versions = "*"
-files = [
-    {file = "libvirt-python-8.9.0.tar.gz", hash = "sha256:2e1cfc3b9bd288b3cac400a6b03593633814236dbd1ecf5a900057bb90181c65"},
-]
-
-[[package]]
 name = "markupsafe"
 version = "2.1.2"
 description = "Safely add untrusted strings to HTML/XML markup."
@@ -1314,4 +1303,4 @@ testing = ["flake8 (<5)", "func-timeout", "jaraco.functools", "jaraco.itertools"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "3bc81ea30a6f74819a10287b2308c43030e388efa47052c35ef68c77e2ec34f0"
+content-hash = "c3fc4943ae4e600affe7f7658d1b2916bf9451e555bf47958c26a39ffe86d845"
