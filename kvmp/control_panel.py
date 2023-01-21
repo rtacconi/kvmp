@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request, g, redirect, session, url_for, jsonify
-import libvirt
 import sys
 import os
 from flask_seasurf import SeaSurf
@@ -25,7 +24,7 @@ def before_request():
 
     if 'user_id' in session:
         users = db.get_user(session['user_id'])
-        app.logger.debug('Users: %s',users)
+        app.logger.debug(session['user_id'])
         if len(users) > 0:
             g.user = users[0]
         
@@ -40,7 +39,6 @@ def login():
         users = db.user_login(username, password)
 
         if users == [(1,)]:
-            app.logger.debug('Session id:', session['user_id'])
             session['user_id'] = users[0][0]
             return redirect(url_for('index'))
         else:

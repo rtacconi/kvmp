@@ -10,8 +10,6 @@ db.cur = db.con.cursor()
 def test_user_login():
     db.cur.execute("DELETE FROM users")
     db.add_user('admin', 'admin@example.com', 'password')
-    db.cur.execute("select * from users")
-    db.cur.fetchall()
     assert db.user_login('admin', 'password') != [], 'It should not be empty'
     assert db.user_login('admin', 'e34fddsfafd') == [], 'It should not find a user'
 
