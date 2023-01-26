@@ -10,7 +10,7 @@ build:
 
 docker-run:
 	docker run -p 5432:5432 -v $(shell pwd)/data:/var/lib/postgresql/data \
-		-e POSTGRES_USER=kvmp -e POSTGRES_PASSWORD=password -d postgres-data-volume
+		-e POSTGRES_USER=kvmp -e POSTGRES_PASSWORD=password -d postgres:15.1
 	docker run -p 6379:6379 -d redis redis-server --save 60 1 --loglevel warning
 
 stop:
@@ -28,6 +28,17 @@ dbmate:
 
 c:
 	poetry run celery --app kvmp.celery worker --loglevel=info
+
+shell:
+	export DATABASE_URL
+	export TEST_DATABASE_URL
+	export DBMATE_DATABASE_URL
+	export DBMATE_TEST_DATABASE_URL
+	export CELERY_BROKER_URL
+	export CELERY_RESULT_BACKEND
+	export FLASK_RUN_HOST=0.0.0.0 && \
+	export FLASK_RUN_PORT=3000 && \
+	poetry run flask --app kvmp.control_panel shell	
 
 run: stop docker-run
 	export DATABASE_URL

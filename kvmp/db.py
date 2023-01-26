@@ -51,8 +51,9 @@ def get_servers():
     return as_dict(cur.fetchall(), columns)
 
 def get_server(id):
+    columns = ['id', 'host', 'username', 'key_file']
     cur.execute("SELECT id, host, username, key_file FROM servers WHERE id = %s", (id,))
-    return cur.fetchone()
+    return as_dict(cur.fetchall(), columns)[0]
 
 def get_server_by_host(host: str) -> List[Tuple]:
     cur.execute("SELECT id, host, username, key_file FROM servers WHERE host = %s", (host,))
@@ -71,3 +72,20 @@ def delete_server(id: int):
     return "Server delete successfully"       
 
 # END SERVERS -----------------------------
+
+def add_vm_info(data, server_id, user_id) -> int:
+    # Execute the INSERT query
+    cur.execute("""INSERT INTO vm_infos (data, server_id, user_id) VALUES (%s, %s, %s)""", 
+        (data, server_id, user_id))
+    con.commit()
+    serial = cur.lastrowid
+    return serial
+
+def get_vms_by_server(id):
+    columns = ['id', 'name', 'state', 'user_id', 'created_at']
+    cur.execute(f"SELECT {', '.join(columns)} FROM vm_infos ORDER BY id")
+    return as_dict(cur.fetchall(), columns)
+
+def add_xml_template(name, user_id, vm_info_id, xml_data):
+    insert_stmt = "INSERT INTO xml_templates (name, user_id, vm_info_id, xml_data, created_at) VALUES (%s, %s, %s, %s, NOW())"
+    cur.execute(insert_stmt, (name, user_id, vm_info_id, xml_data))

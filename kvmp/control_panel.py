@@ -23,10 +23,10 @@ def before_request():
     g.user = None
 
     if 'user_id' in session:
-        users = db.get_user(session['user_id'])
-        app.logger.debug(session['user_id'])
-        if len(users) > 0:
-            g.user = users[0]
+        # users = db.get_user(session['user_id'])
+        # app.logger.debug('Users: %s', users)
+        app.logger.debug('Session ID: %s', session['user_id'])
+        g.user = session['user_id']
         
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -59,6 +59,7 @@ def profile():
 def index():
     if not g.user: return redirect(url_for('login'))
     servers = db.get_servers()
+    app.logger.debug(servers)
     return render_template('index.html', servers=servers)
 
 
@@ -107,6 +108,7 @@ def page_not_found(e):
 
 @app.route("/add_server")
 def add_server_form_page():
+    
     return render_template("add_server.html")
 
 @app.route("/servers/<int:id>", methods=["GET", "POST"])
@@ -114,7 +116,8 @@ def edit_server(id):
     if request.method == "GET":
         app.logger.debug('servers GET edit')
         server = db.get_server(id)
-        return render_template("edit_server.html", server=server)
+        vms = db.get_vms_by_server(id)
+        return render_template("edit_server.html", server=server, vms=vms)
     elif request.method == "POST":
         if request.form.get("_method") == "put":
             app.logger.debug('servers PUT edit')
@@ -132,3 +135,9 @@ def edit_server(id):
             db.add_server(host, username, key_file)
             return redirect(url_for('index'))
     return redirect(url_for('index'))
+
+@app.route("/servers/<int:id>/vms/new", methods=["GET"])
+def add_server_vms(id):
+    server = db.get_server(id)
+    return render_template("add_vm.html", server=server)
+        

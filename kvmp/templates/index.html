@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="row">
+<!--<div class="row">
     <div class="col-sm-12">
         <div class="white-box">
             <h3 class="box-title">Virtual machines</h3>
@@ -43,7 +43,7 @@
             </div>
         </div>
     </div>
-</div>
+</div>-->
 
 <div class="row">
     <div class="col-sm-12">
@@ -64,11 +64,11 @@
                     <tbody>
                         {% for server in servers %}
                         <tr>
-                            <td><a href="/servers/{{ server[0] }}">{{ server[0] }}</a></td>
-                            <td>{{ server[1] }}</td>
-                            <td>{{ server[2] }}</td>
-                            <td>{{ server[3] }}</td>
-                            <td>{{ server[4] }}</td>
+                            <td><a href="/servers/{{ server['id'] }}">{{ server['id'] }}</a></td>
+                            <td>{{ server['host'] }}</td>
+                            <td>{{ server['username'] }}</td>
+                            <td>{{ server['key_file'] }}</td>
+                            <td>{{ server['created_at'] }}</td>
                         </tr>
                         {% endfor %}
                     </tbody>

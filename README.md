@@ -15,6 +15,46 @@ https://testdriven.io/blog/flask-htmx-tailwind/
 ## Migrations
 To manage the database schema we use (dbmate)[https://github.com/amacneil/dbmate]
 
+## virsh notes
+
+(base) rtacconi@ubuntu1:~$ virsh dominfo 4
+Id:             4
+Name:           ubuntu2204-34
+UUID:           76566b94-91e4-11ed-90ec-acde48001122
+OS Type:        hvm
+State:          running
+CPU(s):         2
+CPU time:       2.7s
+Max memory:     1048576 KiB
+Used memory:    1048576 KiB
+Persistent:     no
+Autostart:      disable
+Managed save:   no
+Security model: apparmor
+Security DOI:   0
+Security label: libvirt-76566b94-91e4-11ed-90ec-acde48001122 (enforcing)
+
+(base) rtacconi@ubuntu1:~$ virsh domifaddr 4
+ Name       MAC address          Protocol     Address
+-------------------------------------------------------------------------------
+
+(base) rtacconi@ubuntu1:~$ virsh net-list
+ Name      State    Autostart   Persistent
+--------------------------------------------
+ default   active   yes         yes
+
+(base) rtacconi@ubuntu1:~$ virsh net-info network
+error: failed to get network 'network'
+error: Network not found: no network with matching name 'network'
+
+(base) rtacconi@ubuntu1:~$ virsh net-info default
+Name:           default
+UUID:           19f84246-1843-44ad-ac99-0deb7fef4ee1
+Active:         yes
+Persistent:     yes
+Autostart:      yes
+Bridge:         virbr0
+
 ## Marketing
 
 Hosting control panel virtualization

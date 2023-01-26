@@ -2,25 +2,61 @@
 
 {% block content %}
 <div class="col-lg-4 col-md-12">
-    <form action="/servers/{{ server[0] }}" method="post">
+  <div class="white-box">
+    <form action="/servers/{{ server['id'] }}" method="post">
       <div class="form-group">
         <label for="host">Host:</label>
         <input type="text" class="form-control" id="host" name="host" 
-          value="{{ server[1]}}" required>
+          value="{{ server['host']}}" required>
       </div>
       <div class="form-group">
         <label for="username">Username:</label>
         <input type="text" class="form-control" id="username" name="username" 
-          value="{{ server[2] }}" required>
+          value="{{ server['username'] }}" required>
       </div>
       <div class="form-group">
         <label for="key_file">Key File:</label>
         <input type="text" class="form-control" id="key_file" name="key_file" 
-          value="{{ server[3] }}" required>
+          value="{{ server['key_file'] }}" required>
       </div>
       <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
       <input type="hidden" name="_method" value="put" />
       <button type="submit" class="btn btn-primary">Save Server</button>
     </form>
+  </div>
+</div>
+<hr />
+<div class="row">
+    <div class="col-sm-12">
+        <div class="white-box">
+            <h3 class="box-title">Virtual machines</h3>
+            <a href="/servers/{{ server['id'] }}/vms/new" class="btn btn-primary" role="button" aria-pressed="true">Create VM</a>
+            <div class="table-responsive">
+                <table class="table text-nowrap">
+                    <thead>
+                        <tr>
+                            <th class="border-top-0">#</th>
+                            <th class="border-top-0">Name</th>
+                            <th class="border-top-0">State</th>
+                            <th class="border-top-0">Owner</th>
+                            <th class="border-top-0">IP</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for vm in vms %}
+                        <tr>
+                            <td>{{ vm['id'] }}</td>
+                            <td>{{ vm['name'] }}</td>
+                            <td>{{ vm['state'] }}</td>
+                            <td>{{ vm['user_id'] }}</td>
+                            <td>missing</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
+

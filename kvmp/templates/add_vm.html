@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="col-lg-4 col-md-12">
+  <div class="white-box">
+    <p>Host: {{ server['host'] }}</p>
+    <form action="/servers/{{ server['id'] }}/vms" method="post">
+      <div class="form-group">
+        <label for="host">Name:</label>
+        <input type="text" class="form-control" id="name" name="name" required>
+      </div>
+      <div class="form-group">
+        <label for="exampleFormControlSelect1">VM Template</label>
+        <select class="form-control" id="template" name="template">
+        <option> - select a value - </option>
+          <option>/var/lib/libvirt/images/ubuntu22.04.qcow2</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="cpu">CPU</label>
+        <select class="form-control" id="cpu" name="cpu">
+        <option> - select a value - </option>
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="4">4</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="ram">RAM</label>
+        <select class="form-control" id="ram" name="ram">
+        <option> - select a value - </option>
+          <option value="262144">256 MiB</option>
+          <option value="524288">512 MiB</option>
+          <option value="1048576">1 GiB</option>
+          <option value="2097152">2 GiB</option>
+        </select>
+      </div>
+      <input type="hidden" name="server_id" value="{{ server['id'] }}">
+      <input type="hidden" name="user_id" value="{{ session['user_id'] }}">
+      <input type="hidden" name="_csrf_token" value="{{ csrf_token() }}">
+      <button type="submit" class="btn btn-primary">Add Server</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
