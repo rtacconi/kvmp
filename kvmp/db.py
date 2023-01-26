@@ -69,7 +69,7 @@ def update_server(id: int, host: str, username: str, key_file: str):
 def delete_server(id: int):
     cur.execute("DELETE FROM servers WHERE id = %s", (id,))
     con.commit()
-    return "Server delete successfully"       
+    return "Server deleted successfully"       
 
 # END SERVERS -----------------------------
 

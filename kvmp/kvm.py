@@ -5,7 +5,6 @@ import uuid
 from kvmp.ssh import run_command
 import kvmp.db as db
 import tempfile
-import json
 import subprocess
 
 KIB = 1048576
@@ -38,17 +37,19 @@ def create_instance(xmlconfig, username, host) -> tuple:
     with tempfile.NamedTemporaryFile(mode='w', dir='/tmp', delete=False) as f:
         f.write(xmlconfig)
         xml_file = f.name
+
     result = run_command([
         "virsh", "-c", f"qemu+ssh://{username}@{host}/system", 
         "create", xml_file
     ])
     return result
 
-def parse_vm_info(name, xmlconfig, username, host) -> dict:
+def parse_vm_info(name, username, host) -> dict:
     result = run_command([
         "virsh", "-c", f"qemu+ssh://{username}@{host}/system", 
         "dominfo", name
     ])
+    
     output = []
     for line in result[0].strip().split("\n"):
         columns = line.strip().split()
@@ -101,4 +102,3 @@ def destroy_instance(name, username, host) -> tuple:
 def render_tmp_file(name, content):
     with open(name, 'w') as f:
         f.write(content)
-        f.close()
